@@ -2,8 +2,8 @@
 Contributors: wpdevart
 Tags: Facebook, facebook comments, social comments, comments, wordpress comments 
 Requires at least: 2.9
-Tested up to: 6.6
-Stable tag: 2.5.6
+Tested up to: 6.7
+Stable tag: 2.6.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -103,6 +103,14 @@ Yes, If you are logged in(Fb account) then you will see the moderate options for
 4.  Back-end posts/pages enable option
 
 == Changelog ==
+
+= 2.6.0 ==
+
+* Fixed a mistake.
+
+= 2.5.7 ==
+
+* Changed stable tag.
 
 = 2.5.6 ==
 
