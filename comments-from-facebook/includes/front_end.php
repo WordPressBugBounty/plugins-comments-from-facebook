@@ -114,7 +114,7 @@ class wpdevart_comment_front_end{
 		}
 		?>
         <div id="fb-root"></div>
-		<script async defer crossorigin="anonymous" src="https://connect.facebook.net/<?php echo esc_html($this->params['wpdevart_comments_box_locale']); ?>/sdk.js#xfbml=1&version=v13.0&appId=<?php echo esc_attr($this->params['wpdevart_comment_facebook_app_id']); ?>&autoLogAppEvents=1"></script>	
+		<script async defer crossorigin="anonymous" src="https://connect.facebook.net/<?php echo esc_html($this->params['wpdevart_comments_box_locale']); ?>/sdk.js#xfbml=1&version=v21.0&appId=<?php echo esc_attr($this->params['wpdevart_comment_facebook_app_id']); ?>&autoLogAppEvents=1"></script>	
     <?php
 	}
 	/*Function for creating content Iframe*/

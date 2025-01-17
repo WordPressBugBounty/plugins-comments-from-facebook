@@ -84,17 +84,21 @@ class wpdevart_comment_admin_menu{
 		$sub_men_cap=str_replace( ' ', '-', $this->menu_name);
 		$main_page 	 	  = add_menu_page( esc_attr($this->menu_name), esc_attr($this->menu_name), 'manage_options', esc_attr(str_replace( ' ', '-', $this->menu_name)), array($this, 'main_menu_function'),esc_url($this->plugin_url.'images/facebook_menu_icon.png'));
 		$page_wpdevart_comment	  =	add_submenu_page(esc_attr($this->menu_name),  esc_attr($this->menu_name),  esc_attr($this->menu_name), 'manage_options', esc_attr(str_replace( ' ', '-', $this->menu_name)), array($this, 'main_menu_function'));
-		$page_wpdevart_comment	  = add_submenu_page( esc_attr(str_replace( ' ', '-', $this->menu_name)), 'Featured Plugins', 'Featured Plugins', 'manage_options', 'wpdevart-comment-featured-plugins', array($this, 'featured_plugins'));
-		$page_hire				  = add_submenu_page( esc_attr(str_replace( ' ', '-', $this->menu_name)), 'Hire an Expert', '<span style="color:#00ff66" >Hire an Expert</span>', 'manage_options', 'wpdevart-comment-hire-expert', array($this, 'hire_expert'));
+		$featured_page	  = add_submenu_page( esc_attr(str_replace( ' ', '-', $this->menu_name)), 'Featured Plugins', 'Featured Plugins', 'manage_options', 'wpdevart-comment-featured-plugins', array($this, 'featured_plugins'));
+		$featured_theme_page	  = add_submenu_page( esc_attr(str_replace( ' ', '-', $this->menu_name)), 'Featured Themes', 'Featured Themes', 'manage_options', 'wpdevart-comment-featured-themes', array($this, 'featured_themes'));
+		$hire_expert				  = add_submenu_page( esc_attr(str_replace( ' ', '-', $this->menu_name)), 'Hire an Expert', '<span style="color:#00ff66" >Hire an Expert</span>', 'manage_options', 'wpdevart-comment-hire-expert', array($this, 'hire_expert'));
 
 		add_action('admin_print_styles-' .$main_page, array($this,'menu_requeried_scripts'));
-		add_action('admin_print_styles-' .$page_wpdevart_comment, array($this,'menu_requeried_scripts'));
-		add_action('admin_print_styles-' .$page_hire, array($this,'menu_hire_expert_requeried_scripts'));
+		add_action('admin_print_styles-' . $featured_page, array($this, 'featured_plugins_js_css'));
+        add_action('admin_print_styles-' . $featured_theme_page, array($this, 'featured_themes_js_css'));
+        add_action('admin_print_styles-' . $hire_expert, array($this, 'hire_expert_js_css'));
 
-		if(isset($submenu[$sub_men_cap]))
+		if(isset($submenu[$sub_men_cap])){
 			add_submenu_page( $sub_men_cap, "Support or Any Ideas?", "<span style='color:#00ff66' >Support or Any Ideas?</span>", 'manage_options',"wpdevart_fbcomments_any_ideas",array($this, 'any_ideas'),155);
-		if(isset($submenu[$sub_men_cap]))
-			$submenu[$sub_men_cap][3][2]=wpdevart_comment_support_url;
+			$count_pages = count($submenu[$sub_men_cap])-1;	
+			$submenu[$sub_men_cap][$count_pages][2]=wpdevart_comment_support_url;
+		}
+			
 	}
 	
 	/*###################### Any Ideas function ##################*/		
@@ -113,9 +117,17 @@ class wpdevart_comment_admin_menu{
 		wp_enqueue_style('comment-box-admin-style');
 	}
 	
-	public function menu_hire_expert_requeried_scripts(){	
-		wp_enqueue_style("wpdevart_lightbox_hire_expert",$this->plugin_url.'includes/style/hire_expert.css');
-	}
+	public function featured_plugins_js_css() {
+        wp_enqueue_style('wpda_fbcomments_featured_page_css', $this->plugin_url.'includes/style/featured_plugins_css.css');
+    }
+
+    public function featured_themes_js_css() {
+        wp_enqueue_style('wpda_fbcomments_themes_page_css', $this->plugin_url.'includes/style/featured_themes_css.css');
+    }
+
+    public function hire_expert_js_css() {
+        wp_enqueue_style('wpda_fbcomments_hire_expert_css', $this->plugin_url.'includes/style/hire_expert.css');
+    }
 	
 	/*###################### Function for generating parameters  ##################*/		
 	
@@ -222,7 +234,6 @@ Also, here is another tutorial(from other source) of creating App Id, you can ch
                                             <p><strong>Bg_color</strong> <span class="pro_feature"> (pro)</span> - Select the Facebook comments box background color</p>	
                                             <p><strong>Animation_effect</strong> <span class="pro_feature"> (pro)</span> - Select the animation effect for the Facebook comments box</p>											
                                             <p><strong>Count_of_comments</strong> - Type here the number of Facebook comments to display</p>
-
                                         </div>
                                     </td>
                                 </tr>
@@ -409,11 +420,108 @@ Also, here is another tutorial(from other source) of creating App Id, you can ch
 		</div>        
 		<?php	
 	}
-	
-	/*###################### Featured plugins function ##################*/	
-	
-	public function featured_plugins(){
+		
+	/*######################################### Fonts(select fonts) Function #######################################*/
+
+	private function create_select_element_for_font($select_id='',$curent_font='none'){
+	?>
+   <select id="<?php echo esc_attr($select_id); ?>" name="<?php echo esc_attr($select_id); ?>">
+   
+        <option <?php selected('Arial,Helvetica Neue,Helvetica,sans-serif',$curent_font); ?> value="Arial,Helvetica Neue,Helvetica,sans-serif">Arial *</option>
+        <option <?php selected('Arial Black,Arial Bold,Arial,sans-serif',$curent_font); ?> value="Arial Black,Arial Bold,Arial,sans-serif">Arial Black *</option>
+        <option <?php selected('Arial Narrow,Arial,Helvetica Neue,Helvetica,sans-serif',$curent_font); ?> value="Arial Narrow,Arial,Helvetica Neue,Helvetica,sans-serif">Arial Narrow *</option>
+        <option <?php selected('Courier,Verdana,sans-serif',$curent_font); ?> value="Courier,Verdana,sans-serif">Courier *</option>
+        <option <?php selected('Georgia,Times New Roman,Times,serif',$curent_font); ?> value="Georgia,Times New Roman,Times,serif">Georgia *</option>
+        <option <?php selected('Times New Roman,Times,Georgia,serif',$curent_font); ?> value="Times New Roman,Times,Georgia,serif">Times New Roman *</option>
+        <option <?php selected('Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Arial,sans-serif',$curent_font); ?> value="Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Arial,sans-serif">Trebuchet MS *</option>
+        <option <?php selected('Verdana,sans-serif',$curent_font); ?> value="Verdana,sans-serif">Verdana *</option>
+        <option <?php selected('American Typewriter,Georgia,serif',$curent_font); ?> value="American Typewriter,Georgia,serif">American Typewriter</option>
+        <option <?php selected('Andale Mono,Consolas,Monaco,Courier,Courier New,Verdana,sans-serif',$curent_font); ?> value="Andale Mono,Consolas,Monaco,Courier,Courier New,Verdana,sans-serif">Andale Mono</option>
+        <option <?php selected('Baskerville,Times New Roman,Times,serif',$curent_font); ?> value="Baskerville,Times New Roman,Times,serif">Baskerville</option>
+        <option <?php selected('Bookman Old Style,Georgia,Times New Roman,Times,serif',$curent_font); ?> value="Bookman Old Style,Georgia,Times New Roman,Times,serif">Bookman Old Style</option>
+        <option <?php selected('Calibri,Helvetica Neue,Helvetica,Arial,Verdana,sans-serif',$curent_font); ?> value="Calibri,Helvetica Neue,Helvetica,Arial,Verdana,sans-serif">Calibri</option>
+        <option <?php selected('Cambria,Georgia,Times New Roman,Times,serif',$curent_font); ?> value="Cambria,Georgia,Times New Roman,Times,serif">Cambria</option>
+        <option <?php selected('Candara,Verdana,sans-serif',$curent_font); ?> value="Candara,Verdana,sans-serif">Candara</option>
+        <option <?php selected('Century Gothic,Apple Gothic,Verdana,sans-serif',$curent_font); ?> value="Century Gothic,Apple Gothic,Verdana,sans-serif">Century Gothic</option>
+        <option <?php selected('Century Schoolbook,Georgia,Times New Roman,Times,serif',$curent_font); ?> value="Century Schoolbook,Georgia,Times New Roman,Times,serif">Century Schoolbook</option>
+        <option <?php selected('Consolas,Andale Mono,Monaco,Courier,Courier New,Verdana,sans-serif',$curent_font); ?> value="Consolas,Andale Mono,Monaco,Courier,Courier New,Verdana,sans-serif">Consolas</option>
+        <option <?php selected('Constantia,Georgia,Times New Roman,Times,serif',$curent_font); ?> value="Constantia,Georgia,Times New Roman,Times,serif">Constantia</option>
+        <option <?php selected('Corbel,Lucida Grande,Lucida Sans Unicode,Arial,sans-serif',$curent_font); ?> value="Corbel,Lucida Grande,Lucida Sans Unicode,Arial,sans-serif">Corbel</option>
+        <option <?php selected('Franklin Gothic Medium,Arial,sans-serif',$curent_font); ?> value="Franklin Gothic Medium,Arial,sans-serif">Franklin Gothic Medium</option>
+        <option <?php selected('Garamond,Hoefler Text,Times New Roman,Times,serif',$curent_font); ?> value="Garamond,Hoefler Text,Times New Roman,Times,serif">Garamond</option>
+        <option <?php selected('Gill Sans MT,Gill Sans,Calibri,Trebuchet MS,sans-serif',$curent_font); ?> value="Gill Sans MT,Gill Sans,Calibri,Trebuchet MS,sans-serif">Gill Sans MT</option>
+        <option <?php selected('Helvetica Neue,Helvetica,Arial,sans-serif',$curent_font); ?> value="Helvetica Neue,Helvetica,Arial,sans-serif">Helvetica Neue</option>
+        <option <?php selected('Hoefler Text,Garamond,Times New Roman,Times,sans-serif',$curent_font); ?> value="Hoefler Text,Garamond,Times New Roman,Times,sans-serif">Hoefler Text</option>
+        <option <?php selected('Lucida Bright,Cambria,Georgia,Times New Roman,Times,serif',$curent_font); ?> value="Lucida Bright,Cambria,Georgia,Times New Roman,Times,serif">Lucida Bright</option>
+        <option <?php selected('Lucida Grande,Lucida Sans,Lucida Sans Unicode,sans-serif',$curent_font); ?> value="Lucida Grande,Lucida Sans,Lucida Sans Unicode,sans-serif">Lucida Grande</option>
+        <option <?php selected('monospace',$curent_font); ?> value="monospace">monospace</option>
+        <option <?php selected('Palatino Linotype,Palatino,Georgia,Times New Roman,Times,serif',$curent_font); ?> value="Palatino Linotype,Palatino,Georgia,Times New Roman,Times,serif">Palatino Linotype</option>
+        <option <?php selected('Tahoma,Geneva,Verdana,sans-serif',$curent_font); ?> value="Tahoma,Geneva,Verdana,sans-serif">Tahoma</option>
+        <option <?php selected('Rockwell, Arial Black, Arial Bold, Arial, sans-serif',$curent_font); ?> value="Rockwell, Arial Black, Arial Bold, Arial, sans-serif">Rockwell</option>
+    </select>
+    <?php
+	}
+
+	public function hire_expert(){
 		$plugins_array=array(
+			'custom_site_dev'=>array(
+				'image_url'		=>	$this->plugin_url.'images/hire_expert/1.png',
+				'title'			=>	'Custom WordPress Development',
+				'description'	=>	'Hire a WordPress developer and he will do any custom development you need for you WordPress website.'
+			),
+			'custom_plug_dev'=>array(
+				'image_url'		=>	$this->plugin_url.'images/hire_expert/2.png',
+				'title'			=>	'WordPress Plugin Development',
+				'description'	=>	'Our developers can create any WordPress plugin. They can also customize any plugin and add any functionality you need.'
+			),
+			'custom_theme_dev'=>array(
+				'image_url'		=>	$this->plugin_url.'images/hire_expert/3.png',
+				'title'			=>	'WordPress Theme Development',
+				'description'	=>	'If you need a unique theme or any customization for a ready-made theme, our developers are ready to do it.'
+			),
+			'custom_theme_inst'=>array(
+				'image_url'		=>	$this->plugin_url.'images/hire_expert/4.png',
+				'title'			=>	'WordPress Theme Installation and Customization',
+				'description'	=>	'If you need to install and customize a theme, just let us know, our specialists will customize it.'
+			),
+			'gen_wp_speed'=>array(
+				'image_url'		=>	$this->plugin_url.'images/hire_expert/5.png',
+				'title'			=>	'General WordPress Support',
+				'description'	=>	'Our developers can provide general support. If you have any problems with your site, then our experts are ready to help.'
+			),
+			'speed_op'=>array(
+				'image_url'		=>	$this->plugin_url.'images/hire_expert/6.png',
+				'title'			=>	'WordPress Speed Optimization',
+				'description'	=>	'Hire an expert from WpDevArt and let him take care of your website speed optimization.'
+			),
+			'mig_serv'=>array(
+				'image_url'		=>	$this->plugin_url.'images/hire_expert/7.png',
+				'title'			=>	'WordPress Migration Services',
+				'description'	=>	'Our specialists can migrate websites from any platform to WordPress.'
+			),
+			'page_seo'=>array(
+				'image_url'		=>	$this->plugin_url.'images/hire_expert/8.png',
+				'title'			=>	'WordPress SEO',
+				'description'	=>	'Hire SEO specialists and they will take care of the search engine optimization of your site.'
+			)
+		);
+		
+		echo '<h1 class="wpdev_hire_exp_h1"> Hire an Expert </h1>';
+		echo '<div class="hire_expert_main">';		
+		foreach($plugins_array as $key=>$plugin) {
+			echo '<div class="wpdevart_hire_main"><a target="_blank" class="wpdev_hire_buklet" href="https://wpdevart.com/hire-wordpress-developer-dedicated-experts-are-ready-to-help/">';
+			echo '<div class="wpdevart_hire_image"><img src="'.esc_url($plugin["image_url"]).'"></div>';
+			echo '<div class="wpdevart_hire_information">';
+			echo '<div class="wpdevart_hire_title">'.esc_html($plugin["title"]).'</div>';			
+			echo '<p class="wpdevart_hire_description">'.esc_html($plugin["description"]).'</p>';
+			echo '</div></a></div>';		
+		} 
+		echo '<div><a target="_blank" class="wpdev_hire_button" href="https://wpdevart.com/hire-wordpress-developer-dedicated-experts-are-ready-to-help/">Hire an Expert</a></div>';
+		echo '</div>';	
+	}	
+
+    public function featured_plugins() {
+        $plugins_array=array(
 			'gallery_album'=>array(
 						'image_url'		=>	$this->plugin_url.'images/featured_plugins/gallery-album-icon.png',
 						'site_url'		=>	'http://wpdevart.com/wordpress-gallery-plugin',
@@ -491,242 +599,157 @@ Also, here is another tutorial(from other source) of creating App Id, you can ch
 						'site_url'		=>	'https://wpdevart.com/wordpress-duplicate-page-plugin-easily-clone-posts-and-pages/',
 						'title'			=>	'WordPress Duplicate page',
 						'description'	=>	'Duplicate Page or Post is a great tool that allows duplicating pages and posts. Now you can do it with one click.'
-						),						
-						
-			
+						),				
+
 		);
-		?>
-        <style>
-         .featured_plugin_main{
-			background-color: #ffffff;
-			-webkit-box-sizing: border-box;
-			-moz-box-sizing: border-box;
-			box-sizing: border-box;
-			float: left;
-			margin-right: 30px;
-			margin-bottom: 30px;
-			width: calc((100% - 90px)/3);
-			border-radius: 15px;
-			box-shadow: 1px 1px 7px rgba(0,0,0,0.04);
-			padding: 20px 25px;
-			text-align: center;
-			-webkit-transition:-webkit-transform 0.3s;
-			-moz-transition:-moz-transform 0.3s;
-			transition:transform 0.3s;   
-			-webkit-transform: translateY(0);
-			-moz-transform: translateY0);
-			transform: translateY(0);
-			min-height: 344px;
-		 }
-		.featured_plugin_main:hover{
-			-webkit-transform: translateY(-2px);
-			-moz-transform: translateY(-2px);
-			transform: translateY(-2px);
-		 }
-		.featured_plugin_image{
-			max-width: 128px;
-			margin: 0 auto;
-		}
-		.blue_button{
-    display: inline-block;
-    font-size: 15px;
-    text-decoration: none;
-    border-radius: 5px;
-    color: #ffffff;
-    font-weight: 400;
-    opacity: 1;
-    -webkit-transition: opacity 0.3s;
-    -moz-transition: opacity 0.3s;
-    transition: opacity 0.3s;
-    background-color: #7052fb;
-    padding: 10px 22px;
-    text-transform: uppercase;
-		}
-		.blue_button:hover,
-		.blue_button:focus {
-			color:#ffffff;
-			box-shadow: none;
-			outline: none;
-		}
-		.featured_plugin_image img{
-			max-width: 100%;
-		}
-		.featured_plugin_image a{
-		  display: inline-block;
-		}
-		.featured_plugin_information{	
+        $html = '';
+        $html .= '<h1 class="wpda_featured_plugins_title">Featured Plugins</h1>';
+        foreach ($plugins_array as $plugin) {
+            $html .= '<div class="featured_plugin_main">';
+            $html .= '<div class="featured_plugin_image"><a target="_blank" href="' . $plugin['site_url'] . '"><img src="' . $plugin['image_url'] . '"></a></div>';
+            $html .= '<div class="featured_plugin_information">';
+            $html .= '<div class="featured_plugin_title">';
+            $html .= '<h4><a target="_blank" href="' . $plugin['site_url'] . '">' . $plugin['title'] . '</a></h4>';
+            $html .= '</div>';
+            $html .= '<p class="featured_plugin_description">' . $plugin['description'] . '</p>';
+            $html .= '<a target="_blank" href="' . $plugin['site_url'] . '" class="blue_button">Check The Plugin</a>';
+            $html .= '</div>';
+            $html .= '<div style="clear:both"></div>';
+            $html .= '</div>';
+        }
+        echo $html;
+    }
 
-		}
-		.featured_plugin_title{
-	color: #7052fb;
-	font-size: 18px;
-	display: inline-block;
-		}
-		.featured_plugin_title a{
-	text-decoration:none;
-	font-size: 19px;
-    line-height: 22px;
-	color: #7052fb;
-					
-		}
-		.featured_plugin_title h4{
-			margin: 0px;
-			margin-top: 20px;		
-			min-height: 44px;	
-		}
-		.featured_plugin_description{
-			font-size: 14px;
-				min-height: 63px;
-		}
-		@media screen and (max-width: 1460px){
-			.featured_plugin_main {
-				margin-right: 20px;
-				margin-bottom: 20px;
-				width: calc((100% - 60px)/3);
-				padding: 20px 10px;
-			}
-			.featured_plugin_description {
-				font-size: 13px;
-				min-height: 63px;
-			}
-		}
-		@media screen and (max-width: 1279px){
-			.featured_plugin_main {
-				width: calc((100% - 60px)/2);
-				padding: 20px 20px;
-				min-height: 363px;
-			}	
-		}
-		@media screen and (max-width: 768px){
-			.featured_plugin_main {
-				width: calc(100% - 30px);
-				padding: 20px 20px;
-				min-height: auto;
-				margin: 0 auto 20px;
-				float: none;
-			}	
-			.featured_plugin_title h4{
-				min-height: auto;
-			}	
-			.featured_plugin_description{
-				min-height: auto;
-					font-size: 14px;
-			}	
-		}
+    public function featured_themes() {
+        $themes_array = array(
+            'tistore' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/tistore.jpg',
+                'site_url' => 'https://wpdevart.com/tistore-best-ecommerce-theme-for-wordpress/',
+                'title' => 'TiStore',
+                'description' => 'TiStore is one of the best eCommerce WordPress themes that is fully integrated with WooCommerce.',
+            ),
+            'megastore' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/megastore.jpg',
+                'site_url' => 'https://wpdevart.com/megastore-best-woocommerce-theme-for-wordpress/',
+                'title' => 'MegaStore',
+                'description' => 'MegaStore is one of the best WooCommerce themes available for WordPress.',
+            ),
+            'jevstore' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/jevstore.jpg',
+                'site_url' => 'https://wpdevart.com/jewstore-best-wordpress-jewelry-store-theme/',
+                'title' => 'JewStore',
+                'description' => 'JewStore is a WordPress WooCommerce theme designed for jewelry stores and blogs.',
+            ),
+            'cakeshop' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/cakeshop.jpg',
+                'site_url' => 'https://wpdevart.com/wordpress-cake-shop-theme/',
+                'title' => 'Cake Shop',
+                'description' => 'WordPress Cake Shop is a multi-purpose WooCommerce-ready theme.',
+            ),
+            'flowershop' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/flowershop.jpg',
+                'site_url' => 'https://wpdevart.com/wordpress-flower-shop-theme/',
+                'title' => 'Flower Shop',
+                'description' => 'WordPress Flower Shop is a responsive and WooCommerce-ready theme developed by our team.',
+            ),
+            'coffeeshop' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/coffeeshop.jpg',
+                'site_url' => 'https://wpdevart.com/wordpress-coffee-shop-cafe-theme/',
+                'title' => 'Coffee Shop',
+                'description' => 'It is a responsive and user-friendly theme designed specifically for coffee shop or cafe websites.',
+            ),
+            'weddingplanner' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/weddingplanner.jpg',
+                'site_url' => 'https://wpdevart.com/wordpress-wedding-planner-theme/',
+                'title' => 'Wedding Planner',
+                'description' => 'Wedding Planner is a responsive WordPress theme that is fully integrated with WooCommerce.',
+            ),
+            'Amberd' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/Amberd.jpg',
+                'site_url' => 'https://wpdevart.com/amberd-wordpress-online-store-theme/',
+                'title' => 'AmBerd',
+                'description' => 'AmBerd has all the necessary features and functionality to create a beautiful WordPress website.',
+            ),
+            'bookshop' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/bookshop.jpg',
+                'site_url' => 'https://wpdevart.com/wordpress-book-shop-theme/',
+                'title' => 'Book Shop',
+                'description' => 'The Book Shop WordPress theme is a fresh and well-designed theme for creating bookstores or book blogs.',
+            ),
+            'ecommercemodernstore' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/ecommercemodernstore.jpg',
+                'site_url' => 'https://wpdevart.com/wordpress-ecommerce-modern-store-theme/',
+                'title' => 'Ecommerce Modern Store',
+                'description' => 'WordPress Ecommerce Modern Store theme is one of the best solutions if you want to create an online store.',
+            ),
+            'electrostore' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/electrostore.jpg',
+                'site_url' => 'https://wpdevart.com/wordpress-electronics-store-electro-theme/',
+                'title' => 'ElectroStore',
+                'description' => 'This is a responsive and WooCommerce-ready electronic store theme.',
+            ),
+            'jewelryshop' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/jewelryshop.jpg',
+                'site_url' => 'https://wpdevart.com/wordpress-jewelry-shop-theme/',
+                'title' => 'Jewelry Shop',
+                'description' => 'WordPress Jewelry Shop theme is designed specifically for jewelry websites, but of course, you can use this theme for other types of websites as well.',
+            ),
+            'fashionshop' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/fashionshop.jpg',
+                'site_url' => 'https://wpdevart.com/wordpress-fashion-shop-theme/',
+                'title' => 'Fashion Shop',
+                'description' => 'The Fashion Shop is one of the best responsive WordPress WooCommerce themes for creating a fashion store website.',
+            ),
+            'barbershop' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/barbershop.jpg',
+                'site_url' => 'https://wpdevart.com/wordpress-barbershop-theme/',
+                'title' => 'Barbershop',
+                'description' => 'WordPress Barbershop is another responsive and functional theme developed by our team.',
+            ),
+            'furniturestore' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/furniturestore.jpg',
+                'site_url' => 'https://wpdevart.com/wordpress-furniture-store-theme/',
+                'title' => 'Furniture Store',
+                'description' => 'This is a great option to quickly create an online store using our theme and the WooCommerce plugin. Our theme is fully integrated with WooCommerce.',
+            ),
+            'clothing' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/clothing.jpg',
+                'site_url' => 'https://wpdevart.com/tistore-best-ecommerce-theme-for-wordpress/',
+                'title' => 'Clothing',
+                'description' => 'The Clothing WordPress theme is one of the best responsive eCommerce themes available for WordPress.',
+            ),
+            'weddingphotography' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/weddingphotography.jpg',
+                'site_url' => 'https://wpdevart.com/wordpress-wedding-photography-theme/',
+                'title' => 'Wedding Photography',
+                'description' => 'WordPress Wedding Photography theme is one of the best themes specially designed for wedding photographers or photography companies.',
+            ),
+            'petshop' => array(
+                'image_url' => $this->plugin_url.'images/featured_themes/petshop.jpg',
+                'site_url' => 'https://wpdevart.com/wordpress-pet-shop-theme/',
+                'title' => 'Pet Shop',
+                'description' => 'Pet Shop is a powerful and well-designed WooCommerce WordPress theme.',
+            ),
+        );
+        $html = '';
+        $html .= '<div class="wpdevart_main"><h1 class="wpda_featured_themes_title">Featured Themes</h1>';
 
-        </style>
-      
-		<h1 style="text-align: center;font-size: 50px;font-weight: 700;color: #2b2350;margin: 20px auto 25px;line-height: 1.2;">Featured Plugins</h1>
-		<?php foreach($plugins_array as $key=>$plugin) { ?>
-		<div class="featured_plugin_main">
-			<div class="featured_plugin_image"><a target="_blank" href="<?php echo esc_url($plugin['site_url']); ?>"><img src="<?php echo esc_url($plugin['image_url']); ?>"></a></div>
-			<div class="featured_plugin_information">
-				<div class="featured_plugin_title"><h4><a target="_blank" href="<?php echo esc_url($plugin['site_url']); ?>"><?php echo esc_html($plugin['title']); ?></a></h4></div>
-				<p class="featured_plugin_description"><?php echo esc_html($plugin['description']) ?></p>
-				<a target="_blank" href="<?php echo esc_url($plugin['site_url']); ?>" class="blue_button">Check The Plugin</a>
-			</div>
-			<div style="clear:both"></div>                
-		</div>
-		<?php } 
-	
-	}
-	
-	/*######################################### Fonts(select fonts) Function #######################################*/
-
-	private function create_select_element_for_font($select_id='',$curent_font='none'){
-	?>
-   <select id="<?php echo esc_attr($select_id); ?>" name="<?php echo esc_attr($select_id); ?>">
-   
-        <option <?php selected('Arial,Helvetica Neue,Helvetica,sans-serif',$curent_font); ?> value="Arial,Helvetica Neue,Helvetica,sans-serif">Arial *</option>
-        <option <?php selected('Arial Black,Arial Bold,Arial,sans-serif',$curent_font); ?> value="Arial Black,Arial Bold,Arial,sans-serif">Arial Black *</option>
-        <option <?php selected('Arial Narrow,Arial,Helvetica Neue,Helvetica,sans-serif',$curent_font); ?> value="Arial Narrow,Arial,Helvetica Neue,Helvetica,sans-serif">Arial Narrow *</option>
-        <option <?php selected('Courier,Verdana,sans-serif',$curent_font); ?> value="Courier,Verdana,sans-serif">Courier *</option>
-        <option <?php selected('Georgia,Times New Roman,Times,serif',$curent_font); ?> value="Georgia,Times New Roman,Times,serif">Georgia *</option>
-        <option <?php selected('Times New Roman,Times,Georgia,serif',$curent_font); ?> value="Times New Roman,Times,Georgia,serif">Times New Roman *</option>
-        <option <?php selected('Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Arial,sans-serif',$curent_font); ?> value="Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Arial,sans-serif">Trebuchet MS *</option>
-        <option <?php selected('Verdana,sans-serif',$curent_font); ?> value="Verdana,sans-serif">Verdana *</option>
-        <option <?php selected('American Typewriter,Georgia,serif',$curent_font); ?> value="American Typewriter,Georgia,serif">American Typewriter</option>
-        <option <?php selected('Andale Mono,Consolas,Monaco,Courier,Courier New,Verdana,sans-serif',$curent_font); ?> value="Andale Mono,Consolas,Monaco,Courier,Courier New,Verdana,sans-serif">Andale Mono</option>
-        <option <?php selected('Baskerville,Times New Roman,Times,serif',$curent_font); ?> value="Baskerville,Times New Roman,Times,serif">Baskerville</option>
-        <option <?php selected('Bookman Old Style,Georgia,Times New Roman,Times,serif',$curent_font); ?> value="Bookman Old Style,Georgia,Times New Roman,Times,serif">Bookman Old Style</option>
-        <option <?php selected('Calibri,Helvetica Neue,Helvetica,Arial,Verdana,sans-serif',$curent_font); ?> value="Calibri,Helvetica Neue,Helvetica,Arial,Verdana,sans-serif">Calibri</option>
-        <option <?php selected('Cambria,Georgia,Times New Roman,Times,serif',$curent_font); ?> value="Cambria,Georgia,Times New Roman,Times,serif">Cambria</option>
-        <option <?php selected('Candara,Verdana,sans-serif',$curent_font); ?> value="Candara,Verdana,sans-serif">Candara</option>
-        <option <?php selected('Century Gothic,Apple Gothic,Verdana,sans-serif',$curent_font); ?> value="Century Gothic,Apple Gothic,Verdana,sans-serif">Century Gothic</option>
-        <option <?php selected('Century Schoolbook,Georgia,Times New Roman,Times,serif',$curent_font); ?> value="Century Schoolbook,Georgia,Times New Roman,Times,serif">Century Schoolbook</option>
-        <option <?php selected('Consolas,Andale Mono,Monaco,Courier,Courier New,Verdana,sans-serif',$curent_font); ?> value="Consolas,Andale Mono,Monaco,Courier,Courier New,Verdana,sans-serif">Consolas</option>
-        <option <?php selected('Constantia,Georgia,Times New Roman,Times,serif',$curent_font); ?> value="Constantia,Georgia,Times New Roman,Times,serif">Constantia</option>
-        <option <?php selected('Corbel,Lucida Grande,Lucida Sans Unicode,Arial,sans-serif',$curent_font); ?> value="Corbel,Lucida Grande,Lucida Sans Unicode,Arial,sans-serif">Corbel</option>
-        <option <?php selected('Franklin Gothic Medium,Arial,sans-serif',$curent_font); ?> value="Franklin Gothic Medium,Arial,sans-serif">Franklin Gothic Medium</option>
-        <option <?php selected('Garamond,Hoefler Text,Times New Roman,Times,serif',$curent_font); ?> value="Garamond,Hoefler Text,Times New Roman,Times,serif">Garamond</option>
-        <option <?php selected('Gill Sans MT,Gill Sans,Calibri,Trebuchet MS,sans-serif',$curent_font); ?> value="Gill Sans MT,Gill Sans,Calibri,Trebuchet MS,sans-serif">Gill Sans MT</option>
-        <option <?php selected('Helvetica Neue,Helvetica,Arial,sans-serif',$curent_font); ?> value="Helvetica Neue,Helvetica,Arial,sans-serif">Helvetica Neue</option>
-        <option <?php selected('Hoefler Text,Garamond,Times New Roman,Times,sans-serif',$curent_font); ?> value="Hoefler Text,Garamond,Times New Roman,Times,sans-serif">Hoefler Text</option>
-        <option <?php selected('Lucida Bright,Cambria,Georgia,Times New Roman,Times,serif',$curent_font); ?> value="Lucida Bright,Cambria,Georgia,Times New Roman,Times,serif">Lucida Bright</option>
-        <option <?php selected('Lucida Grande,Lucida Sans,Lucida Sans Unicode,sans-serif',$curent_font); ?> value="Lucida Grande,Lucida Sans,Lucida Sans Unicode,sans-serif">Lucida Grande</option>
-        <option <?php selected('monospace',$curent_font); ?> value="monospace">monospace</option>
-        <option <?php selected('Palatino Linotype,Palatino,Georgia,Times New Roman,Times,serif',$curent_font); ?> value="Palatino Linotype,Palatino,Georgia,Times New Roman,Times,serif">Palatino Linotype</option>
-        <option <?php selected('Tahoma,Geneva,Verdana,sans-serif',$curent_font); ?> value="Tahoma,Geneva,Verdana,sans-serif">Tahoma</option>
-        <option <?php selected('Rockwell, Arial Black, Arial Bold, Arial, sans-serif',$curent_font); ?> value="Rockwell, Arial Black, Arial Bold, Arial, sans-serif">Rockwell</option>
-    </select>
-    <?php
-	}
-	public function hire_expert(){
-		$plugins_array=array(
-			'custom_site_dev'=>array(
-				'image_url'		=>	$this->plugin_url.'images/hire_expert/1.png',
-				'title'			=>	'Custom WordPress Development',
-				'description'	=>	'Hire a WordPress developer and he will do any custom development you need for you WordPress website.'
-			),
-			'custom_plug_dev'=>array(
-				'image_url'		=>	$this->plugin_url.'images/hire_expert/2.png',
-				'title'			=>	'WordPress Plugin Development',
-				'description'	=>	'Our developers can create any WordPress plugin. They can also customize any plugin and add any functionality you need.'
-			),
-			'custom_theme_dev'=>array(
-				'image_url'		=>	$this->plugin_url.'images/hire_expert/3.png',
-				'title'			=>	'WordPress Theme Development',
-				'description'	=>	'If you need a unique theme or any customization for a ready-made theme, our developers are ready to do it.'
-			),
-			'custom_theme_inst'=>array(
-				'image_url'		=>	$this->plugin_url.'images/hire_expert/4.png',
-				'title'			=>	'WordPress Theme Installation and Customization',
-				'description'	=>	'If you need to install and customize a theme, just let us know, our specialists will customize it.'
-			),
-			'gen_wp_speed'=>array(
-				'image_url'		=>	$this->plugin_url.'images/hire_expert/5.png',
-				'title'			=>	'General WordPress Support',
-				'description'	=>	'Our developers can provide general support. If you have any problems with your site, then our experts are ready to help.'
-			),
-			'speed_op'=>array(
-				'image_url'		=>	$this->plugin_url.'images/hire_expert/6.png',
-				'title'			=>	'WordPress Speed Optimization',
-				'description'	=>	'Hire an expert from WpDevArt and let him take care of your website speed optimization.'
-			),
-			'mig_serv'=>array(
-				'image_url'		=>	$this->plugin_url.'images/hire_expert/7.png',
-				'title'			=>	'WordPress Migration Services',
-				'description'	=>	'Our specialists can migrate websites from any platform to WordPress.'
-			),
-			'page_seo'=>array(
-				'image_url'		=>	$this->plugin_url.'images/hire_expert/8.png',
-				'title'			=>	'WordPress SEO',
-				'description'	=>	'Hire SEO specialists and they will take care of the search engine optimization of your site.'
-			)
-		);
-		
-		echo '<h1 class="wpdev_hire_exp_h1"> Hire an Expert </h1>';
-		echo '<div class="hire_expert_main">';		
-		foreach($plugins_array as $key=>$plugin) {
-			echo '<div class="wpdevart_hire_main"><a target="_blank" class="wpdev_hire_buklet" href="https://wpdevart.com/hire-wordpress-developer-dedicated-experts-are-ready-to-help/">';
-			echo '<div class="wpdevart_hire_image"><img src="'.esc_url($plugin["image_url"]).'"></div>';
-			echo '<div class="wpdevart_hire_information">';
-			echo '<div class="wpdevart_hire_title">'.esc_html($plugin["title"]).'</div>';			
-			echo '<p class="wpdevart_hire_description">'.esc_html($plugin["description"]).'</p>';
-			echo '</div></a></div>';		
-		} 
-		echo '<div><a target="_blank" class="wpdev_hire_button" href="https://wpdevart.com/hire-wordpress-developer-dedicated-experts-are-ready-to-help/">Hire an Expert</a></div>';
-		echo '</div>';	
-	}
+        $html .= '<div class="div-container">';
+        foreach ($themes_array as $theme) {
+            $html .= '<div class="theme" data-slug="tistore"><div class="theme-img">';                
+            $html .= ' <img src="'.$theme['image_url'].'" alt="' . $theme['title'] . '">';
+            $html .= '</div>';
+            $html .= '<div class="theme-description">' . $theme['description'] . '</div>';
+            $html .= '<div class="theme-name-container">'; 
+            $html .= '<h2 class="theme-name">' . $theme['title'] . '</h2>';
+            $html .= '<div class="theme-actions">';
+            $html .= '<a target="_blank" aria-label="Check theme" class="button button-primary load-customize" href="' . $theme['site_url'] . '">Check Theme</a>';
+            $html .= '</div></div></div>';
+            
+            
+        }
+        $html .= '</div></div>';
+        echo $html;
+    }
 	
 }
