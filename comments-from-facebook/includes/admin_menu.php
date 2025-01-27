@@ -83,7 +83,7 @@ class wpdevart_comment_admin_menu{
 		global $submenu;
 		$sub_men_cap=str_replace( ' ', '-', $this->menu_name);
 		$main_page 	 	  = add_menu_page( esc_attr($this->menu_name), esc_attr($this->menu_name), 'manage_options', esc_attr(str_replace( ' ', '-', $this->menu_name)), array($this, 'main_menu_function'),esc_url($this->plugin_url.'images/facebook_menu_icon.png'));
-		$page_wpdevart_comment	  =	add_submenu_page(esc_attr($this->menu_name),  esc_attr($this->menu_name),  esc_attr($this->menu_name), 'manage_options', esc_attr(str_replace( ' ', '-', $this->menu_name)), array($this, 'main_menu_function'));
+		add_submenu_page(esc_attr($this->menu_name),  esc_attr($this->menu_name),  esc_attr($this->menu_name), 'manage_options', esc_attr(str_replace( ' ', '-', $this->menu_name)), array($this, 'main_menu_function'));
 		$featured_page	  = add_submenu_page( esc_attr(str_replace( ' ', '-', $this->menu_name)), 'Featured Plugins', 'Featured Plugins', 'manage_options', 'wpdevart-comment-featured-plugins', array($this, 'featured_plugins'));
 		$featured_theme_page	  = add_submenu_page( esc_attr(str_replace( ' ', '-', $this->menu_name)), 'Featured Themes', 'Featured Themes', 'manage_options', 'wpdevart-comment-featured-themes', array($this, 'featured_themes'));
 		$hire_expert				  = add_submenu_page( esc_attr(str_replace( ' ', '-', $this->menu_name)), 'Hire an Expert', '<span style="color:#00ff66" >Hire an Expert</span>', 'manage_options', 'wpdevart-comment-hire-expert', array($this, 'hire_expert'));
