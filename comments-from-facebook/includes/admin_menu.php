@@ -498,17 +498,17 @@ class wpdevart_comment_admin_menu {
 			)
 		);
 
-		echo '<h1 class="wpdev_hire_exp_h1"> Hire an Expert </h1>';
+		echo '<h1 class="wpda_hire_exp_h1"> Hire an Expert </h1>';
 		echo '<div class="hire_expert_main">';
 		foreach ($plugins_array as $key => $plugin) {
-			echo '<div class="wpdevart_hire_main"><a target="_blank" class="wpdev_hire_buklet" href="https://wpdevart.com/hire-wordpress-developer-dedicated-experts-are-ready-to-help/">';
+			echo '<div class="wpdevart_hire_main"><a target="_blank" class="wpda_hire_buklet" href="https://wpdevart.com/hire-wordpress-developer-dedicated-experts-are-ready-to-help/">';
 			echo '<div class="wpdevart_hire_image"><img src="' . esc_url($plugin["image_url"]) . '"></div>';
 			echo '<div class="wpdevart_hire_information">';
 			echo '<div class="wpdevart_hire_title">' . esc_html($plugin["title"]) . '</div>';
 			echo '<p class="wpdevart_hire_description">' . esc_html($plugin["description"]) . '</p>';
 			echo '</div></a></div>';
 		}
-		echo '<div><a target="_blank" class="wpdev_hire_button" href="https://wpdevart.com/hire-wordpress-developer-dedicated-experts-are-ready-to-help/">Hire an Expert</a></div>';
+		echo '<div><a target="_blank" class="wpda_hire_button" href="https://wpdevart.com/hire-wordpress-developer-dedicated-experts-are-ready-to-help/">Hire an Expert</a></div>';
 		echo '</div>';
 	}
 
@@ -598,13 +598,13 @@ class wpdevart_comment_admin_menu {
 		$html .= '<h1 class="wpda_featured_plugins_title">Featured Plugins</h1>';
 		foreach ($plugins_array as $plugin) {
 			$html .= '<div class="featured_plugin_main">';
-			$html .= '<div class="featured_plugin_image"><a target="_blank" href="' . $plugin['site_url'] . '"><img src="' . $plugin['image_url'] . '"></a></div>';
+			$html .= '<div class="featured_plugin_image"><a target="_blank" href="' . esc_url($plugin['site_url']) . '"><img src="' . esc_url($plugin['image_url']) . '"></a></div>';
 			$html .= '<div class="featured_plugin_information">';
 			$html .= '<div class="featured_plugin_title">';
-			$html .= '<h4><a target="_blank" href="' . $plugin['site_url'] . '">' . $plugin['title'] . '</a></h4>';
+			$html .= '<h4><a target="_blank" href="' . esc_url($plugin['site_url']) . '">' . esc_html($plugin['title']) . '</a></h4>';
 			$html .= '</div>';
-			$html .= '<p class="featured_plugin_description">' . $plugin['description'] . '</p>';
-			$html .= '<a target="_blank" href="' . $plugin['site_url'] . '" class="blue_button">Check The Plugin</a>';
+			$html .= '<p class="featured_plugin_description">' . esc_html($plugin['description']) . '</p>';
+			$html .= '<a target="_blank" href="' . esc_url($plugin['site_url']) . '" class="blue_button">Check The Plugin</a>';
 			$html .= '</div>';
 			$html .= '<div style="clear:both"></div>';
 			$html .= '</div>';
@@ -729,13 +729,13 @@ class wpdevart_comment_admin_menu {
 		$html .= '<div class="div-container">';
 		foreach ($themes_array as $theme) {
 			$html .= '<div class="theme" data-slug="tistore"><div class="theme-img">';
-			$html .= ' <img src="' . $theme['image_url'] . '" alt="' . $theme['title'] . '">';
+			$html .= ' <img src="' . esc_url($theme['image_url']) . '" alt="' . esc_attr($theme['title']) . '">';
 			$html .= '</div>';
-			$html .= '<div class="theme-description">' . $theme['description'] . '</div>';
+			$html .= '<div class="theme-description">' . esc_html($theme['description']) . '</div>';
 			$html .= '<div class="theme-name-container">';
-			$html .= '<h2 class="theme-name">' . $theme['title'] . '</h2>';
+			$html .= '<h2 class="theme-name">' . esc_html($theme['title']) . '</h2>';
 			$html .= '<div class="theme-actions">';
-			$html .= '<a target="_blank" aria-label="Check theme" class="button button-primary load-customize" href="' . $theme['site_url'] . '">Check Theme</a>';
+			$html .= '<a target="_blank" aria-label="Check theme" class="button button-primary load-customize" href="' . esc_url($theme['site_url']) . '">Check Theme</a>';
 			$html .= '</div></div></div>';
 		}
 		$html .= '</div></div>';
