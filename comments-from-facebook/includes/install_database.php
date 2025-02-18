@@ -13,11 +13,9 @@ class wpdevart_comment_install_database{
 			$this->plugin_url=$params['plugin_url'];
 		else
 			$this->plugin_url=trailingslashit(dirname(plugins_url('',__FILE__)));
-
 		
 		$this->installed_options=array(
-			"wpdevart_comments_box"=>array(
-								
+			"wpdevart_comments_box"=>array(								
 				"wpdevart_comment_facebook_app_id"					=> '',
 				"wpdevart_comments_box_order_type"					=> 'social',
 				"wpdevart_comment_title_text"						=> 'Facebook Comments Box',
@@ -31,9 +29,7 @@ class wpdevart_comment_install_database{
 				"wpdevart_comments_box_locale"						=>  'en_US',
 				"wpdevart_comments_box_include_sdk"					=> 'yes',				
 			)			
-		);
-		
-		
+		);		
 	}
 	
 	/*###################### Function for installing the database ##################*/	

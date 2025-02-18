@@ -130,9 +130,5 @@ $output_code.='<div id="'.esc_attr($params['iframe_id']).'" style="width:'.( (st
         </optgroup>
       </select>
     <?php 
-	}
-	
-}
-
-
- ?>
+	}	
+} ?>

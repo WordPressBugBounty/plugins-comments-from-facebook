@@ -168,8 +168,7 @@ class wpdevart_comment_admin_menu {
 	/*###################### The main menu function ##################*/
 
 	public function main_menu_function() {
-?>
-		<script>
+		?><script>
 			var wpdevart_comment_ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
 			var wpdevart_comment_plugin_url = "<?php echo esc_url($this->plugin_url); ?>";
 			var wpdevart_comment_parametrs_sucsses_saved = "<?php echo esc_html($this->text_parametrs['parametrs_sucsses_saved']); ?>";
@@ -237,8 +236,7 @@ class wpdevart_comment_admin_menu {
 					</div>
 				</div>
 			</div>
-		</div>
-	<?php
+		</div><?php
 		wp_nonce_field('wpdevart_comment_options_nonce', 'wpdevart_comment_options_nonce');
 	}
 
@@ -246,7 +244,6 @@ class wpdevart_comment_admin_menu {
 	/*#########################  Admin main section function #################################*/
 
 	public function generete_wpdevart_main_section($page_parametrs) {
-
 	?>
 		<div class="main_parametrs_group_div ">
 			<div class="head_panel_div">
@@ -416,9 +413,7 @@ class wpdevart_comment_admin_menu {
 	/*######################################### Fonts(select fonts) Function #######################################*/
 
 	private function create_select_element_for_font($select_id = '', $curent_font = 'none') {
-	?>
-		<select id="<?php echo esc_attr($select_id); ?>" name="<?php echo esc_attr($select_id); ?>">
-
+	?><select id="<?php echo esc_attr($select_id); ?>" name="<?php echo esc_attr($select_id); ?>">
 			<option <?php selected('Arial,Helvetica Neue,Helvetica,sans-serif', $curent_font); ?> value="Arial,Helvetica Neue,Helvetica,sans-serif">Arial *</option>
 			<option <?php selected('Arial Black,Arial Bold,Arial,sans-serif', $curent_font); ?> value="Arial Black,Arial Bold,Arial,sans-serif">Arial Black *</option>
 			<option <?php selected('Arial Narrow,Arial,Helvetica Neue,Helvetica,sans-serif', $curent_font); ?> value="Arial Narrow,Arial,Helvetica Neue,Helvetica,sans-serif">Arial Narrow *</option>
@@ -450,8 +445,7 @@ class wpdevart_comment_admin_menu {
 			<option <?php selected('Palatino Linotype,Palatino,Georgia,Times New Roman,Times,serif', $curent_font); ?> value="Palatino Linotype,Palatino,Georgia,Times New Roman,Times,serif">Palatino Linotype</option>
 			<option <?php selected('Tahoma,Geneva,Verdana,sans-serif', $curent_font); ?> value="Tahoma,Geneva,Verdana,sans-serif">Tahoma</option>
 			<option <?php selected('Rockwell, Arial Black, Arial Bold, Arial, sans-serif', $curent_font); ?> value="Rockwell, Arial Black, Arial Bold, Arial, sans-serif">Rockwell</option>
-		</select>
-<?php
+		</select><?php
 	}
 
 	public function hire_expert() {
