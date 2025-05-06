@@ -5,7 +5,7 @@
  * Plugin URI: https://wpdevart.com/wordpress-facebook-comments-plugin
  * Author URI: https://wpdevart.com
  * Description: Social (Facebook) comments plugin will help you to display Facebook Comments box on your website. You can use Facebook Comments on your pages/posts.
- * Version: 2.6.5
+ * Version: 2.6.6
  * Author: wpdevart
  * License: GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
@@ -30,7 +30,7 @@ class wpdevart_comment_main {
 		define("wpdevart_comment_support_url", "https://wordpress.org/support/plugin/comments-from-facebook");
 		if (!class_exists('wpdevart_comment_setting'))
 			require_once($this->wpdevart_comment_plugin_path . 'includes/library.php');
-		$this->wpdevart_comment_version = 10.0;
+		$this->wpdevart_comment_version = 2.66;
 		$this->call_base_filters();
 		$this->install_databese();
 		$this->create_admin_menu();
@@ -57,7 +57,7 @@ class wpdevart_comment_main {
 
 	public function wpdevart_comment_front_end() {
 		require_once($this->wpdevart_comment_plugin_path . 'includes/front_end.php');
-		$wpdevart_comment_front_end = new wpdevart_comment_front_end(array('menu_name' => 'Wpdevart Comment', 'databese_parametrs' => $this->wpdevart_comment_options));
+		new wpdevart_comment_front_end(array('menu_name' => 'Wpdevart Comment', 'databese_parametrs' => $this->wpdevart_comment_options));
 	}
 
 	/*############  Register Required Scripts function  ################*/
