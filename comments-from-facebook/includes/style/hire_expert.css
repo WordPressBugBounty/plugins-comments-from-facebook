@@ -120,6 +120,7 @@
   display: inline-block;
   margin: 4px 2px;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
 .wpda_hire_button:visited, .wpda_hire_button:hover, .wpda_hire_button:active, .wpda_hire_button {
